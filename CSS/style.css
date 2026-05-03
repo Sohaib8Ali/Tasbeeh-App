@@ -1,0 +1,1085 @@
+/* =========================================
+   TASBEEH APP — STYLESHEET
+   Islamic Aesthetic · Mobile-First · RTL
+   ========================================= */
+
+/* ---- CSS VARIABLES ---- */
+:root {
+    --green: #2e7d5e;
+    --green-light: #3da17a;
+    --green-pale: #e8f5ee;
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --teal: #1a7a7a;
+    --bg: #f4f7f5;
+    --card: #ffffff;
+    --text: #1a2e25;
+    --text-muted: #6b8f7e;
+    --border: #d8ede5;
+    --shadow: 0 4px 20px rgba(46, 125, 94, .10);
+    --shadow-lg: 0 8px 40px rgba(46, 125, 94, .18);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --nav-h: 68px;
+    --top-h: 60px;
+    --transition: .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+body.dark {
+    --bg: #0f1c16;
+    --card: #162518;
+    --text: #d4edd9;
+    --text-muted: #6faa80;
+    --border: #1e3d2a;
+    --green-pale: #1a3326;
+    --shadow: 0 4px 20px rgba(0, 0, 0, .4);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, .55);
+}
+
+
+/* ===== LOADING SCREEN ===== */
+#loadingScreen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    color: var(--text);
+    text-align: center;
+    transition: background var(--transition), color var(--transition);
+}
+
+.loader-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+}
+
+.spinner {
+    width: 70px;
+    height: 70px;
+    border: 6px solid var(--border);
+    border-top: 6px solid var(--green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    box-shadow: var(--shadow);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.app-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--green);
+}
+
+.loading-text {
+    font-size: .9rem;
+    color: var(--text-muted);
+}
+
+/* ---- RESET & BASE ---- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+    overscroll-behavior: none;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100%;
+    transition: background var(--transition), color var(--transition);
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+select {
+    font-family: inherit;
+}
+
+svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ---- APP SHELL ---- */
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ---- TOP BAR ---- */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--top-h);
+    padding: 0 16px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    transition: background var(--transition), border-color var(--transition);
+    z-index: 10;
+}
+
+.app-title {
+    font-family: 'Amiri', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--green);
+    flex: 1;
+    text-align: center;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--green-pale);
+    transition: background var(--transition), transform .15s;
+    flex-shrink: 0;
+}
+
+.icon-btn:active {
+    transform: scale(.92);
+}
+
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--green);
+}
+
+.theme-toggle {
+    font-size: 18px;
+}
+
+.sun,
+.moon {
+    position: absolute;
+    transition: opacity .3s, transform .3s;
+}
+
+body.light .moon {
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+body.dark .sun {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+/* ---- PAGES ---- */
+#pagesContainer {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.page {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: calc(var(--nav-h) + 16px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-24px);
+    transition: opacity .35s ease, transform .35s ease;
+    -webkit-overflow-scrolling: touch;
+}
+
+.page.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(0);
+}
+
+.page.slide-from-right {
+    transform: translateX(24px);
+}
+
+/* ---- HERO BANNER ---- */
+.hero-banner {
+    position: relative;
+    margin: 16px;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, var(--green) 0%, var(--teal) 100%);
+    overflow: hidden;
+    padding: 28px 20px;
+    color: #fff;
+}
+
+.hero-pattern {
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, .08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, .06) 0%, transparent 40%);
+}
+
+.hero-content {
+    position: relative;
+    text-align: center;
+}
+
+.bismillah {
+    font-family: 'Amiri', serif;
+    font-size: 1.55rem;
+    line-height: 1.8;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+}
+
+.hero-sub {
+    font-size: .85rem;
+    opacity: .85;
+    margin-top: 6px;
+}
+
+/* ---- SECTION HEADERS ---- */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px 6px;
+}
+
+.section-header h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.see-all {
+    font-size: .8rem;
+    color: var(--green);
+    font-weight: 600;
+}
+
+/* ---- QUICK GRID ---- */
+.quick-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 4px 16px 16px;
+}
+
+.quick-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    padding: 14px 6px;
+    box-shadow: var(--shadow);
+    transition: transform .15s, box-shadow .15s;
+    color: var(--text);
+    font-size: .75rem;
+    font-weight: 600;
+}
+
+.quick-card:active {
+    transform: scale(.94);
+    box-shadow: none;
+}
+
+.quick-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.quick-icon.green {
+    background: var(--green-pale);
+}
+
+.quick-icon.teal {
+    background: rgba(26, 122, 122, .12);
+}
+
+.quick-icon.gold {
+    background: rgba(201, 168, 76, .12);
+}
+
+.quick-icon.gray {
+    background: rgba(120, 120, 120, .10);
+}
+
+/* ---- SHEIKHS GRID ---- */
+.sheikhs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 4px 16px 8px;
+}
+
+.sheikhs-grid.full {
+    padding: 16px;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.sheikh-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform .18s, box-shadow .18s;
+    cursor: pointer;
+    text-align: center;
+}
+
+.sheikh-card:active {
+    transform: scale(.97);
+    box-shadow: none;
+}
+
+.sheikh-avatar {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: linear-gradient(135deg, var(--green) 0%, var(--teal) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
+
+.sheikh-avatar img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.sheikh-info {
+    padding: 10px 8px 12px;
+}
+
+.sheikh-name {
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.sheikh-country {
+    font-size: .72rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.play-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--green);
+    color: #fff;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: .75rem;
+    font-weight: 600;
+    transition: background .2s;
+}
+
+.play-btn:hover {
+    background: var(--green-light);
+}
+
+.play-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: #fff;
+    stroke: none;
+}
+
+#playerAvatar img {
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+}
+
+/* ---- STATS ROW ---- */
+.stats-row {
+    display: flex;
+    gap: 10px;
+    padding: 4px 16px 16px;
+    overflow-x: auto;
+}
+
+.stats-row::-webkit-scrollbar {
+    display: none;
+}
+
+.stat-card {
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    padding: 14px 18px;
+    min-width: 110px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.stat-num {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--green);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+    font-size: .72rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* ---- TASBEEH PAGE ---- */
+.tasbeeh-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.zikr-select-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.zikr-select-wrap label {
+    font-size: .82rem;
+    color: var(--text-muted);
+}
+
+.zikr-select-wrap select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    font-size: .95rem;
+    font-weight: 600;
+    appearance: none;
+    direction: rtl;
+    box-shadow: var(--shadow);
+    transition: border-color .2s;
+}
+
+.zikr-select-wrap select:focus {
+    outline: none;
+    border-color: var(--green);
+}
+
+.zikr-display {
+    font-family: 'Amiri', serif;
+    font-size: 1.7rem;
+    text-align: center;
+    color: var(--green);
+    line-height: 1.6;
+    min-height: 56px;
+}
+
+/* Ring Counter */
+.counter-ring {
+    position: relative;
+    width: 220px;
+    height: 220px;
+}
+
+.progress-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.ring-bg {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 10;
+}
+
+.ring-fill {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dashoffset .4s cubic-bezier(.4, 0, .2, 1);
+}
+
+.counter-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.counter-num {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    transition: transform .1s;
+}
+
+.counter-num.bump {
+    transform: scale(1.18);
+}
+
+.counter-target {
+    font-size: .85rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Tap Button */
+.tap-btn {
+    width: 100%;
+    max-width: 320px;
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 18px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    box-shadow: 0 6px 24px rgba(46, 125, 94, .35);
+    transition: transform .12s, box-shadow .12s;
+    letter-spacing: .02em;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.tap-btn:active {
+    transform: scale(.96);
+    box-shadow: 0 2px 8px rgba(46, 125, 94, .2);
+}
+
+/* Action Buttons */
+.tasbeeh-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 11px 8px;
+    border-radius: var(--radius-sm);
+    font-size: .85rem;
+    font-weight: 700;
+    transition: transform .12s, opacity .12s;
+}
+
+.action-btn:active {
+    transform: scale(.95);
+    opacity: .8;
+}
+
+.reset-btn {
+    background: rgba(220, 60, 60, .1);
+    color: #cc3333;
+}
+
+.target-btn {
+    background: var(--green-pale);
+    color: var(--green);
+}
+
+.today-count-box {
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 320px;
+}
+
+.today-count-box span {
+    color: var(--text-muted);
+    font-size: .85rem;
+}
+
+.today-count-box strong {
+    font-size: 1.4rem;
+    color: var(--green);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- AZKAR PAGE ---- */
+.azkar-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 16px 16px 8px;
+    overflow-x: auto;
+}
+
+.azkar-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.tab {
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: .82rem;
+    font-weight: 700;
+    white-space: nowrap;
+    background: var(--card);
+    color: var(--text-muted);
+    border: 1.5px solid var(--border);
+    transition: all .2s;
+    flex-shrink: 0;
+}
+
+.tab.active {
+    background: var(--green);
+    color: #fff;
+    border-color: var(--green);
+}
+
+.azkar-list {
+    padding: 8px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.zikr-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.zikr-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.zikr-arabic {
+    font-family: 'Amiri', serif;
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.zikr-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.zikr-repeat {
+    font-size: .75rem;
+    background: var(--green-pale);
+    color: var(--green);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+.zikr-source {
+    font-size: .72rem;
+    color: var(--text-muted);
+}
+
+/* ---- PLAYER PAGE ---- */
+.player-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.player-cover {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green) 0%, var(--teal) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    font-size: 4rem;
+}
+
+.player-info {
+    text-align: center;
+}
+
+.player-info h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.player-info p {
+    color: var(--text-muted);
+    font-size: .85rem;
+    margin-top: 4px;
+}
+
+.surah-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.surah-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 14px;
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: background .2s;
+    gap: 10px;
+}
+
+.surah-item:active {
+    background: var(--green-pale);
+}
+
+.surah-item.playing {
+    background: var(--green-pale);
+}
+
+.surah-item.playing .surah-num {
+    color: var(--green);
+}
+
+.surah-num {
+    width: 28px;
+    height: 28px;
+    background: var(--green-pale);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .75rem;
+    font-weight: 700;
+    color: var(--green);
+    flex-shrink: 0;
+}
+
+.surah-name {
+    font-size: .9rem;
+    font-weight: 600;
+    flex: 1;
+}
+
+.surah-play svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--green);
+}
+
+.player-controls {
+    width: 100%;
+}
+
+.player-controls audio {
+    width: 100%;
+    border-radius: 12px;
+}
+
+/* ---- SETTINGS ---- */
+.settings-list {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.settings-group {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.settings-label {
+    padding: 10px 16px 6px;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-top: 1px solid var(--border);
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.setting-item.clickable {
+    cursor: pointer;
+}
+
+.setting-item.clickable:active {
+    background: var(--green-pale);
+}
+
+.chevron {
+    width: 18px;
+    height: 18px;
+    stroke: var(--text-muted);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    width: 46px;
+    height: 26px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 13px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.slider::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: .3s;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+}
+
+input:checked+.slider {
+    background: var(--green);
+}
+
+input:checked+.slider::before {
+    transform: translateX(20px);
+}
+
+.app-version {
+    text-align: center;
+    font-size: .75rem;
+    color: var(--text-muted);
+    padding: 8px;
+}
+
+/* ---- BOTTOM NAV ---- */
+.bottom-nav {
+    height: var(--nav-h);
+    display: flex;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding: 0 4px;
+    flex-shrink: 0;
+    z-index: 10;
+    transition: background var(--transition), border-color var(--transition);
+}
+
+.nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--text-muted);
+    font-size: .65rem;
+    font-weight: 700;
+    padding: 6px 4px;
+    border-radius: var(--radius-sm);
+    transition: color .2s, background .2s;
+    position: relative;
+}
+
+.nav-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+.nav-btn.active {
+    color: var(--green);
+}
+
+.nav-btn.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    background: var(--green);
+    border-radius: 0 0 4px 4px;
+}
+
+/* ---- ANIMATIONS ---- */
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: .4;
+    }
+
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.tap-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple-el {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, .4);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple .5s linear;
+    pointer-events: none;
+    margin-top: -20px;
+    margin-left: -20px;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sheikh-card,
+.zikr-card,
+.stat-card,
+.quick-card {
+    animation: fadeUp .4s ease both;
+}
+
+/* ---- SCROLLBAR ---- */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 2px;
+}
+
+/* ---- BACK BTN VISIBILITY ---- */
+.back-btn {
+    transition: opacity .2s;
+}
+
+
+.donate-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 12px 18px;
+    background: #25d366;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.donate-btn:hover {
+    transform: scale(1.05);
+    background: #1ebe5d;
+}
